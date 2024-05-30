@@ -1,0 +1,46 @@
+import numpy as np
+import numpy.random as rnd
+import scipy.signal as signal
+import matplotlib.pyplot as plt
+
+
+c1 = randmary(10, [0.3, 0.7])
+m = c1
+c2 = mod_d(m, 3, 100)
+plt.subplot(4, 1, 1)
+plt.plot(c2[0], c2[1])
+
+c3 = channel(c2[1], 10, 0.2, 5)
+plt.subplot(4, 1, 2)
+plt.plot(c3)
+
+ #c4 = sample_and_threshold(c3, 100, 0.2)
+
+h = np.ones(100) 
+
+c5 = np.zeros(len(c3))
+p=100
+for i in range(0, len(c3), p):
+    f= c3[i:(i+p)] * h
+    s=np.sum(f)
+    if s <= 0:
+        c5[i] = 0
+    else:
+        c5[i]= 1
+
+plt.subplot(4, 1, 3)
+plt.plot(c5)
+
+plt.show()
+e = sum(abs(c5[i] -c1) )
+
+
+c6 = np.fft.fft(c5)
+c7 = np.fft.fftfreq(len(c3))
+dsp = np.abs(c6) ** 2
+
+plt.figure()
+plt.subplot(4, 1, 4)
+plt.plot(c7, dsp)
+
+plt.show()
